@@ -18,7 +18,7 @@ Getting Started
 
 Get the code and change into the top level `git` project directory::
 
-    $ git clone https://github.com/loum/hadoop-hive.git && cd hadoop-pseudo
+    $ git clone https://github.com/loum/hadoop-hive.git && cd hadoop-hive
 
 .. note::
 
