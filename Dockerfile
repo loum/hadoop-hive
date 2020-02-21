@@ -6,7 +6,7 @@ RUN wget -P /tmp http://apache.mirror.serversaustralia.com.au/hive/${HIVE_VERSIO
 RUN tar xzf /tmp/apache-${HIVE_VERSION}-bin.tar.gz -C /opt && \
   ln -s /opt/apache-${HIVE_VERSION}-bin /opt/hive && \
   rm /tmp/apache-${HIVE_VERSION}-bin.tar.gz && \
-  chown -R root:root /opt/apache-${HIVE_VERSION}-bin.tar.gz
+  chown -R root:root /opt/apache-${HIVE_VERSION}-bin
 
 # Add Hive executables to hdfs user PATH.
 USER hdfs
@@ -24,3 +24,6 @@ COPY files/hive-site.xml /opt/hive/conf/
 
 COPY scripts/hive-bootstrap.sh /hive-bootstrap.sh
 CMD [ "/hive-bootstrap.sh" ]
+
+# Hiverserver2 port.
+EXPOSE 10000

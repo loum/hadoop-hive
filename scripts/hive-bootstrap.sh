@@ -1,5 +1,12 @@
 #!/bin/sh
-set -x
+
+/usr/sbin/sshd
+
+# Start NameNode daemon and DataNode daemon.
+/opt/hadoop/sbin/start-dfs.sh
+
+# Start ResourceManager daemon and NodeManager daemon.
+/opt/hadoop/sbin/start-yarn.sh
 
 HADOOP_HOME=/opt/hadoop
 HIVE_HOME=/opt/hive
@@ -8,4 +15,4 @@ HIVE_HOME=/opt/hive
 runuser -l hdfs -c "$HIVE_HOME/bin/schematool -dbType derby -initSchema"
 
 # Start the Hiverserver2.
-runuser -l hdfs -c "HADOOP_HOME=$HADOOP_HOME $HIVE_HOME/bin/hiveserver2 > /tmp/hiveserver2.out 2>&1 &"
+runuser -l hdfs -c "HADOOP_HOME=$HADOOP_HOME $HIVE_HOME/bin/hiveserver2"
