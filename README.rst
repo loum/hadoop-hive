@@ -24,7 +24,11 @@ Get the code and change into the top level `git` project directory::
 
     Run all commands from the top-level directory of the `git` repository.
 
-Get the `Makester project <https://github.com/loum/makester.git>`_::
+For first-time setup, get the `Makester project <https://github.com/loum/makester.git>`_::
+
+    $ git submodule update --init
+
+Keep `Makester project <https://github.com/loum/makester.git>`_ up-to-date with::
 
     $ git submodule update --remote --merge
 
