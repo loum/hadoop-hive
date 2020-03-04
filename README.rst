@@ -68,7 +68,7 @@ Check the `Beeline Command Reference <https://cwiki.apache.org/confluence/displa
 
 To run `beeline` commands via `docker exec`::
 
-    $ docker exec hive sh -c "runuser -l hdfs -c 'beeline -u jdbc:hive2://localhost:10000 -e \"SHOW DATABASES\";'"
+    $ docker exec hive sh -c "HADOOP_HOME=/opt/hadoop /opt/hive/bin/beeline -u jdbc:hive2://localhost:10000 -e \"SHOW DATABASES\"\;"
 
 Alternatively, port `10000` is exposed to allow connectivity to clients with JDBC.
 

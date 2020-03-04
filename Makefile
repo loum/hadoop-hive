@@ -20,18 +20,18 @@ rm-image:
 	@$(DOCKER) rmi $(MAKESTER__SERVICE_NAME):$(HASH) || true
 
 login:
-	@$(DOCKER) exec -ti $(MAKESTER__CONTAINER_NAME) su - hdfs
+	@$(DOCKER) exec -ti $(MAKESTER__CONTAINER_NAME) bash || true
 
 beeline:
 	@$(DOCKER) exec -ti $(MAKESTER__CONTAINER_NAME)\
- sh -c "runuser -l hdfs -c 'beeline -u jdbc:hive2://localhost:10000'"
+ bash -c "HADOOP_HOME=/opt/hadoop /opt/hive/bin/beeline -u jdbc:hive2://localhost:10000"
 
 help: base-help docker-help
 	@echo "(Makefile)\n\
   build-image:         Build docker image $(MAKESTER__SERVICE_NAME):$(HASH) (alias bi)\n\
   rm-image:            Delete docker image $(MAKESTER__SERVICE_NAME):$(HASH) (alias rmi) \n\
-  login:               Login to container $(MAKESTER__CONTAINER_NAME) as user \"hdfs\"\n\
-  beeline:             Execute beeline CLI on $(MAKESTER__CONTAINER_NAME) as user \"hdfs\"\n\
+  login:               Login to container $(MAKESTER__CONTAINER_NAME)\n\
+  beeline:             Execute beeline CLI on $(MAKESTER__CONTAINER_NAME)\n\
 	";
 
 .PHONY: help
