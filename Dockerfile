@@ -1,14 +1,25 @@
-FROM loum/hadoop-pseudo:3.2.1-1
+ARG HIVE_VERSION=hive-3.1.2
+
+FROM ubuntu:bionic-20200311 AS downloader
+
+RUN apt-get update && apt-get install -y --no-install-recommends\
+ wget
+
+ARG HIVE_VERSION
+
+RUN wget -qO- http://apache.mirror.serversaustralia.com.au/hive/${HIVE_VERSION}/apache-${HIVE_VERSION}-bin.tar.gz | tar -C /tmp -xzf -
+
+### downloader layer end
+
+FROM loum/hadoop-pseudo:3.2.1-2
 
 USER root
 
-ARG HIVE_VERSION=hive-3.1.2
+ARG HIVE_VERSION
 
-RUN wget -P /tmp http://apache.mirror.serversaustralia.com.au/hive/${HIVE_VERSION}/apache-${HIVE_VERSION}-bin.tar.gz
-RUN tar xzf /tmp/apache-${HIVE_VERSION}-bin.tar.gz -C /opt && \
-  ln -s /opt/apache-${HIVE_VERSION}-bin /opt/hive && \
-  rm /tmp/apache-${HIVE_VERSION}-bin.tar.gz && \
-  chown -R root:root /opt/apache-${HIVE_VERSION}-bin
+COPY --from=downloader /tmp/apache-${HIVE_VERSION}-bin /opt/apache-${HIVE_VERSION}-bin
+RUN ln -s /opt/apache-${HIVE_VERSION}-bin /opt/hive &&\
+ chown -R root:root /opt/apache-${HIVE_VERSION}-bin
 
 # Temporary workaround for conflicting guava jars.
 #
@@ -19,14 +30,19 @@ RUN rm /opt/hive/lib/guava-19.0.jar && \
 
 COPY files/hive-site.xml /opt/hive/conf/
 
-RUN rm /bootstrap.sh
 COPY scripts/hive-bootstrap.sh /hive-bootstrap.sh
 
 # Hiverserver2 port.
 EXPOSE 10000
 
-# Add Hive executables to hdfs user PATH.
-USER hdfs
-RUN sed -i 's/:$PATH/:\/opt\/hive\/bin:$PATH/' ~/.profile
+ARG HADOOP_USER=hdfs
+ARG HADOOP_HOME=/opt/hadoop
+ARG HIVE_HOME=/opt/hive
+
+USER ${HADOOP_USER}
+WORKDIR /home/${HADOOP_USER}
+
+# Add Hadoop/Hive executables to HADOOP_USER PATH.
+RUN sed -i "s|^export PATH=|export PATH=${HIVE_HOME}\/bin:|" ~/.bashrc
 
 CMD [ "/hive-bootstrap.sh" ]
