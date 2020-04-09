@@ -12,7 +12,7 @@ while : ; do
     then
         if [ -f "$file_to_check" ]
         then
-			echo "### Hadoop bootstrap complete"
+            echo "### Hadoop bootstrap complete"
         else
             echo "### ERROR: Hadoop boostrap timeout"
         fi
@@ -34,4 +34,8 @@ echo "### schematool done"
 
 # Start the Hiverserver2.
 echo "### Starting Hiveserver2"
-HADOOP_HOME=$HADOOP_HOME $HIVE_HOME/bin/hiveserver2
+$HIVE_HOME/bin/hs2-ctrl start
+
+# Block until we signal exit.
+trap 'exit 0' TERM
+while true; do sleep 0.5; done
