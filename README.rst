@@ -93,6 +93,14 @@ To run ``beeline`` commands via ``docker exec``::
 
 Alternatively, port ``10000`` is exposed to allow connectivity to clients with JDBC.
 
+**********************
+Web UI for HiveServer2
+**********************
+
+More information can be found at `this link <https://cwiki.apache.org/confluence/display/Hive/Setting+Up+HiveServer2#SettingUpHiveServer2-WebUIforHiveServer2>`_
+
+The Web UI for HiveServer2 can be accessed via `<http://localhost:10002>`_
+
 ******************
 Stop the Container
 ******************

@@ -32,8 +32,11 @@ COPY files/hive-site.xml /opt/hive/conf/
 
 COPY scripts/hive-bootstrap.sh /hive-bootstrap.sh
 
-# Hiverserver2 port.
+# HiveServer2 port.
 EXPOSE 10000
+
+# Web UI for HiveServer2 port.
+EXPOSE 10002
 
 ARG HADOOP_USER=hdfs
 ARG HADOOP_HOME=/opt/hadoop

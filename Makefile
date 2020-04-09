@@ -10,6 +10,7 @@ MAKESTER__RUN_COMMAND := $(DOCKER) run --rm -d\
  --name $(MAKESTER__CONTAINER_NAME)\
  --publish 8088:8088\
  --publish 10000:10000\
+ --publish 10002:10002\
  $(MAKESTER__SERVICE_NAME):$(HASH)
 
 init: makester-requirements
@@ -25,13 +26,14 @@ rm-image:
 	@$(DOCKER) rmi $(MAKESTER__SERVICE_NAME):$(HASH) || true
 
 controlled-run: run
-	@$(PYTHON) makester/scripts/backoff -d "Hiverserver2" -p 10000 localhost
+	@$(PYTHON) makester/scripts/backoff -d "Web UI for HiveServer2" -p 10002 localhost
+	@$(PYTHON) makester/scripts/backoff -d "HiveServer2" -p 10000 localhost
 
 login:
 	@$(DOCKER) exec -ti $(MAKESTER__CONTAINER_NAME) bash || true
 
 beeline:
-	@$(PYTHON) makester/scripts/backoff -d "Hiverserver2" -p 10000 localhost
+	@$(PYTHON) makester/scripts/backoff -d "HiveServer2" -p 10000 localhost
 	@$(DOCKER) exec -ti $(MAKESTER__CONTAINER_NAME)\
  bash -c "HADOOP_HOME=/opt/hadoop /opt/hive/bin/beeline -u jdbc:hive2://localhost:10000"
 
