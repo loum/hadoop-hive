@@ -34,11 +34,11 @@ COPY files/hive-site.xml ${HIVE_HOME}/conf/
 COPY scripts/hs2-ctrl /opt/hive/bin/hs2-ctrl
 COPY scripts/hive-bootstrap.sh /hive-bootstrap.sh
 
-# YARN ResourceManager webapp port.
-EXPOSE 8088
-
-# Hiverserver2 port.
+# HiveServer2 port.
 EXPOSE 10000
+
+# Web UI for HiveServer2 port.
+EXPOSE 10002
 
 ARG HADOOP_USER=hdfs
 ARG HADOOP_HOME=/opt/hadoop
