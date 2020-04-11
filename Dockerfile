@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends\
 
 ARG HIVE_VERSION
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN wget -qO- http://apache.mirror.serversaustralia.com.au/hive/${HIVE_VERSION}/apache-${HIVE_VERSION}-bin.tar.gz | tar -C /tmp -xzf -
 
 ### downloader layer end

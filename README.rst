@@ -11,6 +11,7 @@ Prerequisties
 *************
 
 - `Docker <https://docs.docker.com/install/>`_
+- `GNU make <https://www.gnu.org/software/make/manual/make.html>`_
 
 ***************
 Getting Started
