@@ -12,7 +12,7 @@ RUN wget -qO- http://apache.mirror.serversaustralia.com.au/hive/${HIVE_VERSION}/
 
 ### downloader layer end
 
-FROM loum/hadoop-pseudo:3.2.1-2
+FROM loum/hadoop-pseudo:3.2.1-3
 
 USER root
 
