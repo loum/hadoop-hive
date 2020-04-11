@@ -1,10 +1,23 @@
-#######################################
-Hive v3.1.2 - Hadoop Pseudo Distributed
-#######################################
+#################################################
+Hive v3.1.2 - Hadoop Pseudo Distributed on Docker
+#################################################
 
-Quick and easy way to get Hive running in Hadoop pseudo distributed mode using docker.
+Quick and easy way to get Hive running with Hadoop running in `pseudo-distributed <https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/SingleCluste
+r.html#Pseudo-Distributed_Operation>`_ mode using `Docker <https://docs.docker.com/install/>`_.
 
 See `Apache Hive docs <https://hive.apache.org/>`_ for more information.
+
+************
+Quick Start
+************
+
+Impatient and just want Hive quickly?::
+
+    $ docker run --rm -ti -d \
+     --name hadoop-hive \
+     loum/hadoop-hive:latest
+
+More at `<https://hub.docker.com/r/loum/hadoop-pseudo>`_
 
 *************
 Prerequisties
@@ -61,7 +74,7 @@ To tag the image as ``latest``::
 
     $ make tag
 
-Or to apply tagging convention using <hadoop-version>-<hive-version>-<release-number>::
+Or to apply tagging convention using ``<hadoop-version>-<hive-version>-<image-release-number>``::
 
     $ make tag MAKESTER__IMAGE_TAG=3.2.1-3.1.2-2
 
@@ -88,19 +101,43 @@ Login to ``beeline`` (``!q`` to exit CLI)::
 
 Check the `Beeline Command Reference <https://cwiki.apache.org/confluence/display/Hive/HiveServer2+Clients#HiveServer2Clients-Beeline%E2%80%93CommandLineShell>`_ for more.
 
-To run ``beeline`` commands via ``docker exec``::
+Some other handy commands to run with ``beeline`` via ``make``:
 
-    $ docker exec hive sh -c "HADOOP_HOME=/opt/hadoop /opt/hive/bin/beeline -u jdbc:hive2://localhost:10000 -e \"SHOW DATABASES\"\;"
+Create a Hive table named ``test``::
+
+    $ make beeline-create
+
+To show tables::
+
+    $ make beeline-show
+
+To insert a row of data into Hive table ``test``::
+
+    $ make beeline-insert
+
+To select all rows in Hive table ``test``::
+
+    $ make beeline-select
+
+To drop the Hive table ``test``::
+
+    $ make beeline-drop
 
 Alternatively, port ``10000`` is exposed to allow connectivity to clients with JDBC.
 
-**********************
-Web UI for HiveServer2
-**********************
+**************
+Web Interfaces
+**************
 
-More information can be found at `this link <https://cwiki.apache.org/confluence/display/Hive/Setting+Up+HiveServer2#SettingUpHiveServer2-WebUIforHiveServer2>`_
+The following web interfaces are available to view configurations and logs:
 
-The Web UI for HiveServer2 can be accessed via `<http://localhost:10002>`_
+- `Hadoop NameNode web UI <http://localhost:9870>`_
+- `YARN ResourceManager web UI <http://localhost:8088>`_
+- `HiveServer2 can be accessed via <http://localhost:10002>`_
+
+.. note::
+
+  Follow the link for more information on the `HiveServer2 web UI <https://cwiki.apache.org/confluence/display/Hive/Setting+Up+HiveServer2#SettingUpHiveServer2-WebUIforHiveServer2>`_
 
 ******************
 Stop the Container
