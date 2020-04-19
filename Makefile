@@ -1,8 +1,8 @@
 # Include overrides (must occur before include statements).
-MAKESTER__REPO_NAME := loum
-MAKESTER__CONTAINER_NAME := hadoop-hive
+MAKESTER__REPO_NAME = loum
+MAKESTER__CONTAINER_NAME = hadoop-hive
 
-include makester/makefiles/base.mk
+include makester/makefiles/makester.mk
 include makester/makefiles/docker.mk
 include makester/makefiles/python-venv.mk
 
@@ -16,16 +16,6 @@ MAKESTER__RUN_COMMAND := $(DOCKER) run --rm -d\
  $(MAKESTER__SERVICE_NAME):$(HASH)
 
 init: makester-requirements
-
-bi: build-image
-
-build-image:
-	@$(DOCKER) build -t $(MAKESTER__SERVICE_NAME):$(HASH) .
-
-rmi: rm-image
-
-rm-image:
-	@$(DOCKER) rmi $(MAKESTER__SERVICE_NAME):$(HASH) || true
 
 backoff:
 	@$(PYTHON) makester/scripts/backoff -d "Hadoop NameNode port" -p 9000 localhost
@@ -59,17 +49,14 @@ beeline-drop: BEELINE_CMD = 'DROP TABLE test;'
 
 beeline-create beeline-show beeline-insert beeline-select beeline-drop: beeline-cmd
 
-help: base-help docker-help python-venv-help
+help: makester-help docker-help python-venv-help
 	@echo "(Makefile)\n\
-  build-image:         Build docker image $(MAKESTER__SERVICE_NAME):$(HASH) (alias bi)\n\
-  rm-image:            Delete docker image $(MAKESTER__SERVICE_NAME):$(HASH) (alias rmi) \n\
   login:               Login to container $(MAKESTER__CONTAINER_NAME)\n\
   beeline:             Start beeline CLI on $(MAKESTER__CONTAINER_NAME)\n\
   beeline-create:      Execute beeline command \"CREATE TABLE ...\" on $(MAKESTER__CONTAINER_NAME)\n\
   beeline-show:        Execute beeline command \"SHOW TABLES\" on $(MAKESTER__CONTAINER_NAME)\n\
   beeline-insert:      Execute beeline command \"INSERT INTO TABLE ...\" on $(MAKESTER__CONTAINER_NAME)\n\
   beeline-select:      Execute beeline command \"SELECT * FROM ...\" on $(MAKESTER__CONTAINER_NAME)\n\
-  beeline-drop:        Execute beeline command \"DROP TABLE ...\" on $(MAKESTER__CONTAINER_NAME)\n\
-	";
+  beeline-drop:        Execute beeline command \"DROP TABLE ...\" on $(MAKESTER__CONTAINER_NAME)\n"
 
 .PHONY: help
