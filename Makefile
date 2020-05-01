@@ -1,10 +1,12 @@
-# Include overrides (must occur before include statements).
-MAKESTER__REPO_NAME = loum
-MAKESTER__CONTAINER_NAME = hadoop-hive
-
 include makester/makefiles/makester.mk
 include makester/makefiles/docker.mk
 include makester/makefiles/python-venv.mk
+
+MAKESTER__REPO_NAME = loum
+MAKESTER__CONTAINER_NAME = hadoop-hive
+
+MAKESTER__VERSION = 3.2.1-3.1.2
+MAKESTER__RELEASE_NUMBER = 3
 
 MAKESTER__RUN_COMMAND := $(DOCKER) run --rm -d\
  --name $(MAKESTER__CONTAINER_NAME)\
@@ -14,6 +16,8 @@ MAKESTER__RUN_COMMAND := $(DOCKER) run --rm -d\
  --publish 10000:10000\
  --publish 10002:10002\
  $(MAKESTER__SERVICE_NAME):$(HASH)
+
+MAKESTER__IMAGE_TARGET_TAG = $(HASH)
 
 init: makester-requirements
 
@@ -48,6 +52,13 @@ beeline-select: BEELINE_CMD = 'SELECT * FROM test;'
 beeline-drop: BEELINE_CMD = 'DROP TABLE test;'
 
 beeline-create beeline-show beeline-insert beeline-select beeline-drop: beeline-cmd
+
+vars:
+	@$(MAKE) -s print-MAKESTER__REPO_NAME\
+ print-MAKESTER__IMAGE_TAG_ALIAS\
+ print-MAKESTER__SERVICE_NAME\
+ print-MAKESTER__VERSION\
+ print-MAKESTER__RELEASE_NUMBER
 
 help: makester-help docker-help python-venv-help
 	@echo "(Makefile)\n\

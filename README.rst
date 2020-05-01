@@ -44,7 +44,7 @@ For first-time setup, get the `Makester project <https://github.com/loum/makeste
 
 Keep `Makester project <https://github.com/loum/makester.git>`_ up-to-date with::
 
-    $ git submodule update --remote --merge
+    $ make submodule-update
 
 Setup the environment::
 
@@ -66,22 +66,9 @@ Image Build
 
     $ make bi
 
-*********
-Image Tag
-*********
-
-To tag the image as ``latest``::
-
-    $ make tag
-
-Or to apply tagging convention using ``<hadoop-version>-<hive-version>-<image-release-number>``::
-
-    $ make tag MAKESTER__IMAGE_TAG=3.2.1-3.1.2-2
-
-
-*******************
-Start the Container
-*******************
+************************************
+Interact with Hive using Beeline CLI
+************************************
 
 To simply start the container::
 
@@ -90,10 +77,6 @@ To simply start the container::
 To start the container and wait for all Hadoop services to initiate::
 
     $ make controlled-run
-
-************************************
-Interact with Hive using Beeline CLI
-************************************
 
 Login to ``beeline`` (``!q`` to exit CLI)::
 
@@ -125,9 +108,12 @@ To drop the Hive table ``test``::
 
 Alternatively, port ``10000`` is exposed to allow connectivity to clients with JDBC.
 
-**************
+To stop::
+
+    $ make stop
+
 Web Interfaces
-**************
+==============
 
 The following web interfaces are available to view configurations and logs:
 
@@ -146,3 +132,11 @@ Stop the Container
 ::
 
     $ make stop
+
+*********
+Image Tag
+*********
+
+To apply tagging convention using ``<hadoop-version>-<hive-version>-<image-release-number>``::
+
+    $ make tag MAKESTER__IMAGE_TAG=3.2.1-3.1.2-2
