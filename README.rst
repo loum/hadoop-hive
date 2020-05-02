@@ -125,18 +125,27 @@ The following web interfaces are available to view configurations and logs:
 
   Follow the link for more information on the `HiveServer2 web UI <https://cwiki.apache.org/confluence/display/Hive/Setting+Up+HiveServer2#SettingUpHiveServer2-WebUIforHiveServer2>`_
 
-******************
-Stop the Container
-******************
-
-::
-
-    $ make stop
-
 *********
 Image Tag
 *********
 
+.. note::
+
+    Search for existing tags with command::
+
+       $ make search-image
+
 To apply tagging convention using ``<hadoop-version>-<hive-version>-<image-release-number>``::
 
     $ make tag MAKESTER__IMAGE_TAG=3.2.1-3.1.2-2
+
+.. note::
+
+    Update versioning information in ``Makefile`` as follows:
+
+       - ``<hadoop-version>-<image-release-number>`` - ``MAKESTER__VERSION``
+       - ``<image-release-number>`` can be set via ``MAKESTER__RELEASE_NUMBER``
+
+To tag the image as ``latest``::
+
+    $ make tag-latest
