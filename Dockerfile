@@ -1,6 +1,8 @@
-ARG HIVE_VERSION=hive-3.1.2
+ARG HIVE_VERSION=3.1.2
+ARG UBUNTU_BASE_IMAGE
+ARG HADOOP_PSEUDO_BASE_IMAGE=3.2.1-4
 
-FROM ubuntu:bionic-20200311 AS downloader
+FROM ubuntu:$UBUNTU_BASE_IMAGE AS downloader
 
 RUN apt-get update && apt-get install -y --no-install-recommends\
  wget
@@ -8,20 +10,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends\
 ARG HIVE_VERSION
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN wget -qO- http://apache.mirror.serversaustralia.com.au/hive/${HIVE_VERSION}/apache-${HIVE_VERSION}-bin.tar.gz | tar -C /tmp -xzf -
+RUN wget -qO- http://apache.mirror.serversaustralia.com.au/hive/hive-${HIVE_VERSION}/apache-hive-${HIVE_VERSION}-bin.tar.gz | tar -C /tmp -xzf -
 
 ### downloader layer end
 
-FROM loum/hadoop-pseudo:3.2.1-3
+FROM loum/hadoop-pseudo:$HADOOP_PSEUDO_BASE_IMAGE
 
 USER root
 
 ARG HIVE_VERSION
 ARG HIVE_HOME=/opt/hive
 
-COPY --from=downloader /tmp/apache-${HIVE_VERSION}-bin /opt/apache-${HIVE_VERSION}-bin
-RUN ln -s /opt/apache-${HIVE_VERSION}-bin ${HIVE_HOME} &&\
- chown -R root:root /opt/apache-${HIVE_VERSION}-bin
+COPY --from=downloader /tmp/apache-hive-${HIVE_VERSION}-bin /opt/apache-hive-${HIVE_VERSION}-bin
+RUN ln -s /opt/apache-hive-${HIVE_VERSION}-bin ${HIVE_HOME} &&\
+ chown -R root:root /opt/apache-hive-${HIVE_VERSION}-bin
 
 # Temporary workaround for conflicting guava jars.
 #

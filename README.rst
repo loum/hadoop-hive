@@ -13,11 +13,9 @@ Quick Start
 
 Impatient and just want Hive quickly?::
 
-    $ docker run --rm -ti -d \
-     --name hadoop-hive \
-     loum/hadoop-hive:latest
+  docker run --rm -ti -d --name hadoop-hive loum/hadoop-hive:latest
 
-More at `<https://hub.docker.com/r/loum/hadoop-pseudo>`_
+More at `<https://hub.docker.com/r/loum/hadoop-pseudo>`_.
 
 *************
 Prerequisties
@@ -32,23 +30,23 @@ Getting Started
 
 Get the code and change into the top level ``git`` project directory::
 
-    $ git clone https://github.com/loum/hadoop-hive.git && cd hadoop-hive
+  git clone https://github.com/loum/hadoop-hive.git && cd hadoop-hive
 
 .. note::
 
-    Run all commands from the top-level directory of the ``git`` repository.
+  Run all commands from the top-level directory of the ``git`` repository.
 
 For first-time setup, get the `Makester project <https://github.com/loum/makester.git>`_::
 
-    $ git submodule update --init
+  git submodule update --init
 
 Keep `Makester project <https://github.com/loum/makester.git>`_ up-to-date with::
 
-    $ make submodule-update
+  make submodule-update
 
 Setup the environment::
 
-    $ make init
+  make init
 
 ************
 Getting Help
@@ -56,7 +54,7 @@ Getting Help
 
 There should be a ``make`` target to be able to get most things done.  Check the help for more information::
 
-    $ make help
+  make help
 
 ***********
 Image Build
@@ -64,7 +62,7 @@ Image Build
 
 ::
 
-    $ make bi
+  make build-image
 
 ************************************
 Interact with Hive using Beeline CLI
@@ -72,15 +70,15 @@ Interact with Hive using Beeline CLI
 
 To simply start the container::
 
-    $ make run
+  make run
 
 To start the container and wait for all Hadoop services to initiate::
 
-    $ make controlled-run
+  make controlled-run
 
 Login to ``beeline`` (``!q`` to exit CLI)::
 
-    $ make beeline
+  make beeline
 
 Check the `Beeline Command Reference <https://cwiki.apache.org/confluence/display/Hive/HiveServer2+Clients#HiveServer2Clients-Beeline%E2%80%93CommandLineShell>`_ for more.
 
@@ -88,29 +86,29 @@ Some other handy commands to run with ``beeline`` via ``make``:
 
 Create a Hive table named ``test``::
 
-    $ make beeline-create
+  make beeline-create
 
 To show tables::
 
-    $ make beeline-show
+  make beeline-show
 
 To insert a row of data into Hive table ``test``::
 
-    $ make beeline-insert
+  make beeline-insert
 
 To select all rows in Hive table ``test``::
 
-    $ make beeline-select
+  make beeline-select
 
 To drop the Hive table ``test``::
 
-    $ make beeline-drop
+  make beeline-drop
 
 Alternatively, port ``10000`` is exposed to allow connectivity to clients with JDBC.
 
 To stop::
 
-    $ make stop
+  make stop
 
 Web Interfaces
 ==============
@@ -125,27 +123,26 @@ The following web interfaces are available to view configurations and logs:
 
   Follow the link for more information on the `HiveServer2 web UI <https://cwiki.apache.org/confluence/display/Hive/Setting+Up+HiveServer2#SettingUpHiveServer2-WebUIforHiveServer2>`_
 
-*********
-Image Tag
-*********
+***********************
+Docker Image Management
+***********************
 
-.. note::
+Image Searches
+==============
 
-    Search for existing tags with command::
+Search for existing Docker image tags with command::
 
-       $ make search-image
+  make search-image
+
+Image Tagging
+=============
+
+By default, ``makester`` will tag the new Docker image with the current branch hash.  This provides a degree of uniqueness but is not very intuitive.  That's where the ``tag-version`` ``Makefile`` target can help.
 
 To apply tagging convention using ``<hadoop-version>-<hive-version>-<image-release-number>``::
 
-    $ make tag MAKESTER__IMAGE_TAG=3.2.1-3.1.2-2
-
-.. note::
-
-    Update versioning information in ``Makefile`` as follows:
-
-       - ``<hadoop-version>-<image-release-number>`` - ``MAKESTER__VERSION``
-       - ``<image-release-number>`` can be set via ``MAKESTER__RELEASE_NUMBER``
+  make tag-version
 
 To tag the image as ``latest``::
 
-    $ make tag-latest
+  make tag-latest
