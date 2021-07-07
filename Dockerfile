@@ -1,6 +1,6 @@
-ARG HIVE_VERSION=3.1.2
+ARG HIVE_VERSION
 ARG UBUNTU_BASE_IMAGE
-ARG HADOOP_PSEUDO_BASE_IMAGE=3.2.1-4
+ARG HADOOP_PSEUDO_BASE_IMAGE
 
 FROM ubuntu:$UBUNTU_BASE_IMAGE AS downloader
 
@@ -52,4 +52,4 @@ WORKDIR /home/${HADOOP_USER}
 # Add Hadoop/Hive executables to HADOOP_USER PATH.
 RUN sed -i "s|^export PATH=|export PATH=${HIVE_HOME}\/bin:|" ~/.bashrc
 
-CMD [ "/hive-bootstrap.sh" ]
+ENTRYPOINT [ "/hive-bootstrap.sh" ]
