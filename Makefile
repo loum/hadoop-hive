@@ -7,13 +7,13 @@ HADOOP_VERSION := 3.2.2
 
 # Tagging convention used: <hadoop-version>-<hive-version>-<image-release-number>
 MAKESTER__VERSION = $(HADOOP_VERSION)-$(HIVE_VERSION)
-MAKESTER__RELEASE_NUMBER = 1
+MAKESTER__RELEASE_NUMBER = 2
 
 include makester/makefiles/makester.mk
 include makester/makefiles/docker.mk
 include makester/makefiles/python-venv.mk
 
-UBUNTU_BASE_IMAGE := focal-20210609
+UBUNTU_BASE_IMAGE := focal-20210921
 HADOOP_PSEUDO_BASE_IMAGE := $(HADOOP_VERSION)-1
 
 MAKESTER__BUILD_COMMAND = $(DOCKER) build --rm\
@@ -46,9 +46,6 @@ backoff:
 
 controlled-run: run backoff
 
-login:
-	@$(DOCKER) exec -ti $(MAKESTER__CONTAINER_NAME) bash || true
-
 beeline: backoff
 	@$(DOCKER) exec -ti $(MAKESTER__CONTAINER_NAME)\
  bash -c "HADOOP_HOME=/opt/hadoop /opt/hive/bin/beeline -u jdbc:hive2://localhost:10000"
@@ -71,7 +68,6 @@ beeline-create beeline-show beeline-insert beeline-select beeline-drop: beeline-
 
 help: makester-help docker-help python-venv-help
 	@echo "(Makefile)\n\
-  login:               Login to container $(MAKESTER__CONTAINER_NAME)\n\
   beeline:             Start beeline CLI on $(MAKESTER__CONTAINER_NAME)\n\
   beeline-create:      Execute beeline command \"CREATE TABLE ...\" on $(MAKESTER__CONTAINER_NAME)\n\
   beeline-show:        Execute beeline command \"SHOW TABLES\" on $(MAKESTER__CONTAINER_NAME)\n\
