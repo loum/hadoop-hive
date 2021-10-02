@@ -3,34 +3,37 @@
 MAKESTER__REPO_NAME := loum
 
 HIVE_VERSION := 3.1.2
-HADOOP_VERSION := 3.2.2
+HADOOP_VERSION := 3.3.1
 
 # Tagging convention used: <hadoop-version>-<hive-version>-<image-release-number>
 MAKESTER__VERSION = $(HADOOP_VERSION)-$(HIVE_VERSION)
-MAKESTER__RELEASE_NUMBER = 2
+MAKESTER__RELEASE_NUMBER = 1
 
 include makester/makefiles/makester.mk
 include makester/makefiles/docker.mk
 include makester/makefiles/python-venv.mk
 
 UBUNTU_BASE_IMAGE := focal-20210921
-HADOOP_PSEUDO_BASE_IMAGE := $(HADOOP_VERSION)-1
 
 MAKESTER__BUILD_COMMAND = $(DOCKER) build --rm\
  --no-cache\
  --build-arg HIVE_VERSION=$(HIVE_VERSION)\
  --build-arg UBUNTU_BASE_IMAGE=$(UBUNTU_BASE_IMAGE)\
- --build-arg HADOOP_PSEUDO_BASE_IMAGE=$(HADOOP_PSEUDO_BASE_IMAGE)\
+ --build-arg HADOOP_VERSION=$(HADOOP_VERSION)\
  -t $(MAKESTER__IMAGE_TAG_ALIAS) .
 
 MAKESTER__CONTAINER_NAME = hadoop-hive
 MAKESTER__RUN_COMMAND := $(DOCKER) run --rm -d\
  --name $(MAKESTER__CONTAINER_NAME)\
+ --env YARN_SITE__YARN_NODEMANAGER_AUX_SERVICES=mapreduce_shuffle\
+ --env YARN_SITE__YARN_LOG_AGGREGATION_ENABLE=true\
  --publish 9000:9000\
  --publish 8088:8088\
+ --publish 8042:8042\
  --publish 9870:9870\
  --publish 10000:10000\
  --publish 10002:10002\
+ --publish 19888:19888\
  $(MAKESTER__SERVICE_NAME):$(HASH)
 
 MAKESTER__IMAGE_TARGET_TAG = $(HASH)

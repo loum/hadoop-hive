@@ -1,6 +1,6 @@
 ARG HIVE_VERSION
 ARG UBUNTU_BASE_IMAGE
-ARG HADOOP_PSEUDO_BASE_IMAGE
+ARG HADOOP_VERSION
 
 FROM ubuntu:$UBUNTU_BASE_IMAGE AS downloader
 
@@ -14,7 +14,7 @@ RUN wget -qO- http://apache.mirror.serversaustralia.com.au/hive/hive-${HIVE_VERS
 
 ### downloader layer end
 
-FROM loum/hadoop-pseudo:$HADOOP_PSEUDO_BASE_IMAGE
+FROM loum/hadoop-pseudo:$HADOOP_VERSION
 
 USER root
 
